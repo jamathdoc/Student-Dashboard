@@ -190,7 +190,7 @@ function renderProgressAndLessons() {
                 badge.textContent = 'Completed ✓';
                 badge.className = 'badge badge-complete';
             } else {
-                badge.textContent = 'Not Complete';
+                badge.textContent = 'Not Started';
                 badge.className = 'badge badge-incomplete';
             }
         }
