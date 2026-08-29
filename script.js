@@ -2,9 +2,10 @@
 
 // LocalStorage Keys
 const NAME_KEY = 'math_dashboard_student_name';
-const COMPLETED_KEY = 'math_dashboard_completed_lessons';
+const STATUSES_KEY = 'math_dashboard_lesson_statuses';
+const COMPLETED_KEY = 'math_dashboard_completed_lessons'; // Fallback / legacy compatibility
 
-// State Variables (data state only, not styling variables)
+// State Variables
 let activeLessonId = null;
 
 // Lesson Data Details
@@ -75,7 +76,7 @@ function initDashboard() {
     // Load saved student name from Web Storage
     loadStudentName();
 
-    // Load completed lessons state from Web Storage and update UI
+    // Load lesson statuses state from Web Storage and update UI
     renderProgressAndLessons();
 }
 
@@ -116,103 +117,48 @@ function updateWelcomeMessage(name) {
     }
 }
 
-// Retrieve array of completed lesson IDs from Web Storage
-function getCompletedLessons() {
-    const data = localStorage.getItem(COMPLETED_KEY);
-    return data ? JSON.parse(data) : [];
+// Retrieve status map of all lessons from Web Storage
+function getLessonStatuses() {
+    const data = localStorage.getItem(STATUSES_KEY);
+    if (data) {
+        return JSON.parse(data);
+    }
+
+    // Check for legacy array in Web Storage if STATUSES_KEY is not yet set
+    const legacyData = localStorage.getItem(COMPLETED_KEY);
+    const legacyCompletedArray = legacyData ? JSON.parse(legacyData) : [];
+
+    return {
+        1: legacyCompletedArray.includes(1) ? 'Completed' : 'Not Started',
+        2: legacyCompletedArray.includes(2) ? 'Completed' : 'Not Started',
+        3: legacyCompletedArray.includes(3) ? 'Completed' : 'Not Started'
+    };
 }
 
-// Save array of completed lesson IDs to Web Storage
-function setCompletedLessons(completedArray) {
+// Save status map of all lessons to Web Storage
+function setLessonStatuses(statusesMap) {
+    localStorage.setItem(STATUSES_KEY, JSON.stringify(statusesMap));
+
+    // Keep legacy COMPLETED_KEY synced for backward compatibility
+    const completedArray = Object.keys(statusesMap)
+        .filter(id => statusesMap[id] === 'Completed')
+        .map(Number);
     localStorage.setItem(COMPLETED_KEY, JSON.stringify(completedArray));
 }
 
-// Toggle lesson completion state
-function toggleComplete(lessonId) {
-    let completed = getCompletedLessons();
-    const index = completed.indexOf(lessonId);
-
-    if (index === -1) {
-        completed.push(lessonId);
-    } else {
-        completed.splice(index, 1);
-    }
-
-    setCompletedLessons(completed);
-    renderProgressAndLessons();
-
-    // If modal is open for this lesson, update modal completion button state
-    if (activeLessonId === lessonId) {
-        updateModalCompleteButton(completed.includes(lessonId));
-    }
-}
-
-// Render overall progress bar and lesson card states
-function renderProgressAndLessons() {
-    const completed = getCompletedLessons();
-    const totalLessons = 3;
-    const count = completed.length;
-
-    // Update Progress Text
-    const progressText = document.getElementById('progressText');
-    if (progressText) {
-        progressText.textContent = `${count} of ${totalLessons} Lessons Completed`;
-    }
-
-    // Update Progress Bar class (strictly using CSS class rules, NO JS style variables)
-    const progressBar = document.getElementById('progressBar');
-    if (progressBar) {
-        let fillClass = 'progress-fill-0';
-        if (count === 1) fillClass = 'progress-fill-33';
-        if (count === 2) fillClass = 'progress-fill-66';
-        if (count === 3) fillClass = 'progress-fill-100';
-
-        progressBar.className = `progress-fill ${fillClass}`;
-    }
-
-    // Update individual lesson cards (1, 2, 3)
-    for (let id = 1; id <= totalLessons; id++) {
-        const isCompleted = completed.includes(id);
-        const card = document.getElementById(`card-${id}`);
-        const badge = document.getElementById(`badge-${id}`);
-        const completeBtn = document.getElementById(`completeBtn-${id}`);
-
-        if (card) {
-            if (isCompleted) {
-                card.classList.add('card-completed');
-            } else {
-                card.classList.remove('card-completed');
-            }
-        }
-
-        if (badge) {
-            if (isCompleted) {
-                badge.textContent = 'Completed ✓';
-                badge.className = 'badge badge-complete';
-            } else {
-                badge.textContent = 'Not Started';
-                badge.className = 'badge badge-incomplete';
-            }
-        }
-
-        if (completeBtn) {
-            if (isCompleted) {
-                completeBtn.textContent = 'Completed ✓';
-                completeBtn.className = 'btn btn-completed-state';
-            } else {
-                completeBtn.textContent = 'Mark Complete';
-                completeBtn.className = 'btn btn-complete';
-            }
-        }
-    }
-}
-
-// Start Lesson - Opens the interactive lesson modal
+// Start Lesson - Opens lesson modal and sets lesson status to "In Progress" (if not already Completed)
 function startLesson(lessonId) {
     const lesson = lessonsData[lessonId];
     if (!lesson) return;
 
     activeLessonId = lessonId;
+
+    const statuses = getLessonStatuses();
+    // Update status to "In Progress" if it hasn't been completed yet
+    if (statuses[lessonId] !== 'Completed') {
+        statuses[lessonId] = 'In Progress';
+        setLessonStatuses(statuses);
+    }
 
     const modal = document.getElementById('lessonModal');
     const modalTitle = document.getElementById('modalTitle');
@@ -223,11 +169,100 @@ function startLesson(lessonId) {
     if (modalIcon) modalIcon.textContent = lesson.icon;
     if (modalBody) modalBody.innerHTML = lesson.content;
 
-    const completed = getCompletedLessons();
-    updateModalCompleteButton(completed.includes(lessonId));
+    updateModalCompleteButton(statuses[lessonId] === 'Completed');
+    renderProgressAndLessons();
 
     if (modal) {
         modal.classList.remove('modal-hidden');
+    }
+}
+
+// Toggle or Mark Lesson as Complete
+function toggleComplete(lessonId) {
+    const statuses = getLessonStatuses();
+    const currentStatus = statuses[lessonId] || 'Not Started';
+
+    if (currentStatus === 'Completed') {
+        statuses[lessonId] = 'In Progress';
+    } else {
+        statuses[lessonId] = 'Completed';
+    }
+
+    setLessonStatuses(statuses);
+    renderProgressAndLessons();
+
+    if (activeLessonId === lessonId) {
+        updateModalCompleteButton(statuses[lessonId] === 'Completed');
+    }
+}
+
+// Render overall progress bar and lesson card states
+function renderProgressAndLessons() {
+    const statuses = getLessonStatuses();
+    const totalLessons = 3;
+
+    let completedCount = 0;
+    for (let id = 1; id <= totalLessons; id++) {
+        if (statuses[id] === 'Completed') {
+            completedCount++;
+        }
+    }
+
+    // Update Progress Text
+    const progressText = document.getElementById('progressText');
+    if (progressText) {
+        progressText.textContent = `${completedCount} of ${totalLessons} Lessons Completed`;
+    }
+
+    // Update Progress Bar class
+    const progressBar = document.getElementById('progressBar');
+    if (progressBar) {
+        let fillClass = 'progress-fill-0';
+        if (completedCount === 1) fillClass = 'progress-fill-33';
+        if (completedCount === 2) fillClass = 'progress-fill-66';
+        if (completedCount === 3) fillClass = 'progress-fill-100';
+
+        progressBar.className = `progress-fill ${fillClass}`;
+    }
+
+    // Update individual lesson cards (1, 2, 3)
+    for (let id = 1; id <= totalLessons; id++) {
+        const status = statuses[id] || 'Not Started';
+        const card = document.getElementById(`card-${id}`);
+        const badge = document.getElementById(`badge-${id}`);
+        const completeBtn = document.getElementById(`completeBtn-${id}`);
+
+        if (card) {
+            card.classList.remove('card-completed', 'card-in-progress');
+            if (status === 'Completed') {
+                card.classList.add('card-completed');
+            } else if (status === 'In Progress') {
+                card.classList.add('card-in-progress');
+            }
+        }
+
+        if (badge) {
+            if (status === 'Completed') {
+                badge.textContent = 'Completed ✓';
+                badge.className = 'badge badge-complete';
+            } else if (status === 'In Progress') {
+                badge.textContent = 'In Progress';
+                badge.className = 'badge badge-in-progress';
+            } else {
+                badge.textContent = 'Not Started';
+                badge.className = 'badge badge-incomplete';
+            }
+        }
+
+        if (completeBtn) {
+            if (status === 'Completed') {
+                completeBtn.textContent = 'Completed ✓';
+                completeBtn.className = 'btn btn-completed-state';
+            } else {
+                completeBtn.textContent = 'Mark Complete';
+                completeBtn.className = 'btn btn-complete';
+            }
+        }
     }
 }
 

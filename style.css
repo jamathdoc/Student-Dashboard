@@ -276,6 +276,11 @@ body {
     background: #f0fdf4;
 }
 
+.card-in-progress {
+    border-color: #bae6fd;
+    background: #f0f9ff;
+}
+
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -302,6 +307,11 @@ body {
 .badge-incomplete {
     background-color: #fef3c7;
     color: #d97706;
+}
+
+.badge-in-progress {
+    background-color: #e0f2fe;
+    color: #0369a1;
 }
 
 .badge-complete {
