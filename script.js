@@ -7,9 +7,10 @@ const COMPLETED_KEY = 'math_dashboard_completed_lessons'; // Fallback / legacy c
 
 // State Variables
 let activeLessonId = null;
-const attemptedLessons = { 1: false, 2: false, 3: false };
+const solvedLessons = { 1: false, 2: false, 3: false };
+const currentQuestionIndex = { 1: 0, 2: 0, 3: 0 };
 
-// Lesson Data Details
+// Lesson Data Details with Question Banks
 const lessonsData = {
     1: {
         title: "1. Addition & Subtraction",
@@ -21,12 +22,40 @@ const lessonsData = {
                 <li><strong>Subtraction (-):</strong> Taking one number away from another. (e.g., 15 - 6 = 9)</li>
             </ul>
         `,
-        question: "If you have 8 apples and pick 4 more, how many apples do you have in total?",
-        correctAnswerText: "8 + 4 = 12 apples!",
-        checkAnswer: (input) => {
-            const val = input.trim().toLowerCase();
-            return val === '12' || val === '12 apples' || val === '12 apples!' || val === 'twelve' || val === 'twelve apples' || val.includes('12');
-        }
+        questions: [
+            {
+                question: "If you have 8 apples and pick 4 more, how many apples do you have in total?",
+                correctAnswerText: "8 + 4 = 12 apples!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '12' || val === '12 apples' || val === '12 apples!' || val === 'twelve' || val === 'twelve apples' || val.includes('12');
+                }
+            },
+            {
+                question: "There are 15 birds on a tree. 6 birds fly away. How many birds are left on the tree?",
+                correctAnswerText: "15 - 6 = 9 birds!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '9' || val === '9 birds' || val === 'nine' || val === 'nine birds' || val.includes('9');
+                }
+            },
+            {
+                question: "Sam has 9 marbles and buys 7 more. How many marbles does Sam have now?",
+                correctAnswerText: "9 + 7 = 16 marbles!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '16' || val === '16 marbles' || val === 'sixteen' || val.includes('16');
+                }
+            },
+            {
+                question: "You have 20 candies and give away 8 to your friends. How many candies do you have left?",
+                correctAnswerText: "20 - 8 = 12 candies!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '12' || val === '12 candies' || val === 'twelve' || val.includes('12');
+                }
+            }
+        ]
     },
     2: {
         title: "2. Multiplication & Division",
@@ -38,12 +67,40 @@ const lessonsData = {
                 <li><strong>Division (&divide;):</strong> Splitting a quantity into equal groups. (e.g., 12 &divide; 3 = 4)</li>
             </ul>
         `,
-        question: "If 15 cookies are shared equally among 3 friends, how many cookies does each friend get?",
-        correctAnswerText: "15 &divide; 3 = 5 cookies each!",
-        checkAnswer: (input) => {
-            const val = input.trim().toLowerCase();
-            return val === '5' || val === '5 cookies' || val === '5 cookies each' || val === 'five' || val === 'five cookies' || val.includes('5');
-        }
+        questions: [
+            {
+                question: "If 15 cookies are shared equally among 3 friends, how many cookies does each friend get?",
+                correctAnswerText: "15 &divide; 3 = 5 cookies each!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '5' || val === '5 cookies' || val === '5 cookies each' || val === 'five' || val === 'five cookies' || val.includes('5');
+                }
+            },
+            {
+                question: "A box holds 4 rows of 6 pencils. How many pencils are in the box in total?",
+                correctAnswerText: "4 &times; 6 = 24 pencils!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '24' || val === '24 pencils' || val === 'twenty four' || val === 'twenty-four' || val.includes('24');
+                }
+            },
+            {
+                question: "If you have 20 stickers and put 4 stickers on each page, how many pages can you fill?",
+                correctAnswerText: "20 &divide; 4 = 5 pages!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '5' || val === '5 pages' || val === 'five' || val.includes('5');
+                }
+            },
+            {
+                question: "A farmer plants 3 rows of apple trees with 8 trees in each row. How many trees are planted?",
+                correctAnswerText: "3 &times; 8 = 24 trees!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '24' || val === '24 trees' || val === 'twenty four' || val === 'twenty-four' || val.includes('24');
+                }
+            }
+        ]
     },
     3: {
         title: "3. Fractions & Decimals",
@@ -55,12 +112,40 @@ const lessonsData = {
                 <li><strong>Decimals:</strong> Numbers expressed with a decimal point (e.g., 0.5 equals 1/2).</li>
             </ul>
         `,
-        question: "If you eat 2 slices out of an 8-slice pizza, what fraction of the pizza did you eat?",
-        correctAnswerText: "2/8 (which simplifies to 1/4 or 0.25)!",
-        checkAnswer: (input) => {
-            const val = input.trim().toLowerCase();
-            return val.includes('2/8') || val.includes('1/4') || val.includes('0.25') || val.includes('one fourth') || val.includes('one-fourth') || val.includes('quarter') || val.includes('2 out of 8');
-        }
+        questions: [
+            {
+                question: "If you eat 2 slices out of an 8-slice pizza, what fraction of the pizza did you eat?",
+                correctAnswerText: "2/8 (which simplifies to 1/4 or 0.25)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val.includes('2/8') || val.includes('1/4') || val.includes('0.25') || val.includes('one fourth') || val.includes('one-fourth') || val.includes('quarter') || val.includes('2 out of 8');
+                }
+            },
+            {
+                question: "What decimal is equivalent to the fraction 1/2?",
+                correctAnswerText: "0.5 (or 1/2)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '0.5' || val === '0.50' || val === '1/2' || val.includes('0.5') || val.includes('half');
+                }
+            },
+            {
+                question: "If 3 out of 4 squares are shaded blue, what fraction of the squares are shaded?",
+                correctAnswerText: "3/4 (or 0.75)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '3/4' || val === '0.75' || val.includes('3/4') || val.includes('0.75') || val.includes('three fourths') || val.includes('three quarters');
+                }
+            },
+            {
+                question: "If you have 1 whole candy bar and eat 0.5 of it, what fraction of the candy bar remains?",
+                correctAnswerText: "1/2 (or 0.5)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '1/2' || val === '0.5' || val.includes('1/2') || val.includes('0.5') || val.includes('half');
+                }
+            }
+        ]
     }
 };
 
@@ -197,9 +282,13 @@ function startLesson(lessonId) {
     if (modalTitle) modalTitle.textContent = lesson.title;
     if (modalIcon) modalIcon.textContent = lesson.icon;
     if (modalRefresher) modalRefresher.innerHTML = lesson.refresher;
-    if (modalQuestion) modalQuestion.textContent = lesson.question;
 
-    // Requirement 7: Clear answer input and feedback state when opening a lesson
+    // Load active question from lesson question bank
+    const qIndex = currentQuestionIndex[lessonId] || 0;
+    const currentQ = lesson.questions[qIndex];
+    if (modalQuestion) modalQuestion.textContent = currentQ.question;
+
+    // Requirement 9: Clear answer input and feedback state when opening a lesson
     if (answerInput) answerInput.value = '';
     if (feedbackEl) {
         feedbackEl.innerHTML = '';
@@ -220,29 +309,44 @@ function checkLessonAnswer() {
 
     const inputEl = document.getElementById('practiceAnswerInput');
     const feedbackEl = document.getElementById('practiceFeedback');
+    const modalQuestion = document.getElementById('modalQuestion');
     if (!inputEl || !feedbackEl) return;
 
     const userInputValue = inputEl.value.trim();
 
-    // Requirement 6: Do not allow an empty response to be checked
+    // Requirement 8: Do not allow an empty answer to count as an attempt
     if (!userInputValue) {
         feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> Please enter an answer first before checking.';
         feedbackEl.className = 'practice-feedback feedback-warning';
         return;
     }
 
-    // Mark active lesson as attempted since non-empty answer was checked
-    attemptedLessons[activeLessonId] = true;
-
     const lesson = lessonsData[activeLessonId];
-    const isCorrect = lesson.checkAnswer(userInputValue);
+    const qIndex = currentQuestionIndex[activeLessonId] || 0;
+    const currentQ = lesson.questions[qIndex];
+    const isCorrect = currentQ.checkAnswer(userInputValue);
 
     if (isCorrect) {
-        feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <strong>Correct!</strong> ${lesson.correctAnswerText}`;
+        // Requirement 6: Correct answer unlocks completion & displays positive feedback
+        solvedLessons[activeLessonId] = true;
+        feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <div><strong>Correct!</strong> ${currentQ.correctAnswerText}<br><span style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.2rem; display: inline-block;">Great job! You can now mark this lesson as complete.</span></div>`;
         feedbackEl.className = 'practice-feedback feedback-success';
     } else {
-        feedbackEl.innerHTML = `<span class="feedback-icon">❌</span> That response is not correct. The correct answer is: <strong>${lesson.correctAnswerText}</strong>`;
+        // Requirement 3 & 5: Incorrect answer displays explanation, rotates to new question from bank, and clears input
+        feedbackEl.innerHTML = `<span class="feedback-icon">❌</span> <div>That response is not correct. The correct answer was: <strong>${currentQ.correctAnswerText}</strong><br><span style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.25rem; display: inline-block;"><strong>New Question Loaded:</strong> Try the new question above!</span></div>`;
         feedbackEl.className = 'practice-feedback feedback-error';
+
+        // Rotate to the next question in the lesson's question bank
+        const nextIndex = (qIndex + 1) % lesson.questions.length;
+        currentQuestionIndex[activeLessonId] = nextIndex;
+        const newQ = lesson.questions[nextIndex];
+
+        if (modalQuestion) {
+            modalQuestion.textContent = newQ.question;
+        }
+
+        // Clear input field for the new question
+        inputEl.value = '';
     }
 
     const statuses = getLessonStatuses();
@@ -255,19 +359,19 @@ function toggleComplete(lessonId) {
     const statuses = getLessonStatuses();
     const currentStatus = statuses[lessonId] || 'Not Started';
 
-    // Requirement: Must attempt practice question before marking lesson as complete
-    if (currentStatus !== 'Completed' && !attemptedLessons[lessonId]) {
+    // Requirement 2: Must answer a practice question correctly before marking lesson complete
+    if (currentStatus !== 'Completed' && !solvedLessons[lessonId]) {
         if (activeLessonId === lessonId) {
             const feedbackEl = document.getElementById('practiceFeedback');
             if (feedbackEl) {
-                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> Please attempt and check the practice question first before marking this lesson as complete!';
+                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> You must answer a practice question correctly before you can mark this lesson as complete!';
                 feedbackEl.className = 'practice-feedback feedback-warning';
             }
         } else {
             startLesson(lessonId);
             const feedbackEl = document.getElementById('practiceFeedback');
             if (feedbackEl) {
-                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> Please attempt and check the practice question first before marking this lesson as complete!';
+                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> You must answer a practice question correctly before you can mark this lesson as complete!';
                 feedbackEl.className = 'practice-feedback feedback-warning';
             }
         }
@@ -297,7 +401,7 @@ function renderProgressAndLessons() {
     for (let id = 1; id <= totalLessons; id++) {
         if (statuses[id] === 'Completed') {
             completedCount++;
-            attemptedLessons[id] = true;
+            solvedLessons[id] = true;
         }
     }
 
@@ -351,7 +455,7 @@ function renderProgressAndLessons() {
             if (status === 'Completed') {
                 completeBtn.textContent = 'Completed ✓';
                 completeBtn.className = 'btn btn-completed-state';
-            } else if (!attemptedLessons[id]) {
+            } else if (!solvedLessons[id]) {
                 completeBtn.textContent = 'Mark Complete';
                 completeBtn.className = 'btn btn-complete btn-disabled-attempt';
             } else {
@@ -378,7 +482,7 @@ function updateModalCompleteButton(isCompleted) {
         if (isCompleted) {
             modalCompleteBtn.textContent = 'Completed ✓';
             modalCompleteBtn.className = 'btn btn-completed-state';
-        } else if (activeLessonId && !attemptedLessons[activeLessonId]) {
+        } else if (activeLessonId && !solvedLessons[activeLessonId]) {
             modalCompleteBtn.textContent = 'Mark Complete';
             modalCompleteBtn.className = 'btn btn-complete btn-disabled-attempt';
         } else {
@@ -404,7 +508,8 @@ function resetProgress() {
     localStorage.removeItem(COMPLETED_KEY);
 
     for (let id = 1; id <= 3; id++) {
-        attemptedLessons[id] = false;
+        solvedLessons[id] = false;
+        currentQuestionIndex[id] = 0;
     }
 
     renderProgressAndLessons();
