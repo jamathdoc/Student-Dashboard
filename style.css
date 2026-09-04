@@ -568,6 +568,17 @@ body {
     line-height: 1;
 }
 
+.btn-disabled-attempt {
+    opacity: 0.7;
+    cursor: pointer;
+    position: relative;
+}
+
+.btn-disabled-attempt:hover {
+    transform: none;
+    opacity: 0.85;
+}
+
 /* Responsive styles */
 @media (max-width: 640px) {
     .header {

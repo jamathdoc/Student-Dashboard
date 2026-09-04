@@ -7,6 +7,7 @@ const COMPLETED_KEY = 'math_dashboard_completed_lessons'; // Fallback / legacy c
 
 // State Variables
 let activeLessonId = null;
+const attemptedLessons = { 1: false, 2: false, 3: false };
 
 // Lesson Data Details
 const lessonsData = {
@@ -230,6 +231,9 @@ function checkLessonAnswer() {
         return;
     }
 
+    // Mark active lesson as attempted since non-empty answer was checked
+    attemptedLessons[activeLessonId] = true;
+
     const lesson = lessonsData[activeLessonId];
     const isCorrect = lesson.checkAnswer(userInputValue);
 
@@ -240,12 +244,35 @@ function checkLessonAnswer() {
         feedbackEl.innerHTML = `<span class="feedback-icon">❌</span> That response is not correct. The correct answer is: <strong>${lesson.correctAnswerText}</strong>`;
         feedbackEl.className = 'practice-feedback feedback-error';
     }
+
+    const statuses = getLessonStatuses();
+    updateModalCompleteButton(statuses[activeLessonId] === 'Completed');
+    renderProgressAndLessons();
 }
 
 // Toggle or Mark Lesson as Complete
 function toggleComplete(lessonId) {
     const statuses = getLessonStatuses();
     const currentStatus = statuses[lessonId] || 'Not Started';
+
+    // Requirement: Must attempt practice question before marking lesson as complete
+    if (currentStatus !== 'Completed' && !attemptedLessons[lessonId]) {
+        if (activeLessonId === lessonId) {
+            const feedbackEl = document.getElementById('practiceFeedback');
+            if (feedbackEl) {
+                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> Please attempt and check the practice question first before marking this lesson as complete!';
+                feedbackEl.className = 'practice-feedback feedback-warning';
+            }
+        } else {
+            startLesson(lessonId);
+            const feedbackEl = document.getElementById('practiceFeedback');
+            if (feedbackEl) {
+                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> Please attempt and check the practice question first before marking this lesson as complete!';
+                feedbackEl.className = 'practice-feedback feedback-warning';
+            }
+        }
+        return;
+    }
 
     if (currentStatus === 'Completed') {
         statuses[lessonId] = 'In Progress';
@@ -270,6 +297,7 @@ function renderProgressAndLessons() {
     for (let id = 1; id <= totalLessons; id++) {
         if (statuses[id] === 'Completed') {
             completedCount++;
+            attemptedLessons[id] = true;
         }
     }
 
@@ -323,6 +351,9 @@ function renderProgressAndLessons() {
             if (status === 'Completed') {
                 completeBtn.textContent = 'Completed ✓';
                 completeBtn.className = 'btn btn-completed-state';
+            } else if (!attemptedLessons[id]) {
+                completeBtn.textContent = 'Mark Complete';
+                completeBtn.className = 'btn btn-complete btn-disabled-attempt';
             } else {
                 completeBtn.textContent = 'Mark Complete';
                 completeBtn.className = 'btn btn-complete';
@@ -347,6 +378,9 @@ function updateModalCompleteButton(isCompleted) {
         if (isCompleted) {
             modalCompleteBtn.textContent = 'Completed ✓';
             modalCompleteBtn.className = 'btn btn-completed-state';
+        } else if (activeLessonId && !attemptedLessons[activeLessonId]) {
+            modalCompleteBtn.textContent = 'Mark Complete';
+            modalCompleteBtn.className = 'btn btn-complete btn-disabled-attempt';
         } else {
             modalCompleteBtn.textContent = 'Mark Complete';
             modalCompleteBtn.className = 'btn btn-complete';
@@ -368,6 +402,10 @@ function resetProgress() {
 
     localStorage.removeItem(STATUSES_KEY);
     localStorage.removeItem(COMPLETED_KEY);
+
+    for (let id = 1; id <= 3; id++) {
+        attemptedLessons[id] = false;
+    }
 
     renderProgressAndLessons();
 }
