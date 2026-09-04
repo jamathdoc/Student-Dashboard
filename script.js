@@ -232,7 +232,16 @@ function updateWelcomeMessage(name) {
 function getLessonStatuses() {
     const data = localStorage.getItem(STATUSES_KEY);
     if (data) {
-        return JSON.parse(data);
+        try {
+            const parsed = JSON.parse(data);
+            return {
+                1: parsed[1] || 'Not Started',
+                2: parsed[2] || 'Not Started',
+                3: parsed[3] || 'Not Started'
+            };
+        } catch (e) {
+            // fallback to default
+        }
     }
 
     // Check for legacy array in Web Storage if STATUSES_KEY is not yet set
@@ -257,7 +266,7 @@ function setLessonStatuses(statusesMap) {
     localStorage.setItem(COMPLETED_KEY, JSON.stringify(completedArray));
 }
 
-// Start Lesson - Opens lesson modal and sets lesson status to "In Progress" (if not already Completed)
+// Start Lesson - Opens lesson modal and sets lesson status to "In Progress" (if currently Not Started)
 function startLesson(lessonId) {
     const lesson = lessonsData[lessonId];
     if (!lesson) return;
@@ -265,8 +274,8 @@ function startLesson(lessonId) {
     activeLessonId = lessonId;
 
     const statuses = getLessonStatuses();
-    // Update status to "In Progress" if it hasn't been completed yet
-    if (statuses[lessonId] !== 'Completed') {
+    // Update status to "In Progress" ONLY if it is currently "Not Started"
+    if (statuses[lessonId] === 'Not Started') {
         statuses[lessonId] = 'In Progress';
         setLessonStatuses(statuses);
     }
