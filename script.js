@@ -194,15 +194,18 @@ function initDashboard() {
 // Save Student Name to Web Storage
 function saveStudentName() {
     const nameInput = document.getElementById('studentNameInput');
+    if (!nameInput) return;
+
     const name = nameInput.value.trim();
 
-    if (name) {
-        localStorage.setItem(NAME_KEY, name);
-        updateWelcomeMessage(name);
-    } else {
-        localStorage.removeItem(NAME_KEY);
-        updateWelcomeMessage('Student');
+    // Requirement 7: Do not allow a blank name to be saved. Ask user to enter a name first.
+    if (!name) {
+        alert('Please enter a student name first before saving.');
+        return;
     }
+
+    localStorage.setItem(NAME_KEY, name);
+    updateWelcomeMessage(name);
 }
 
 // Load Student Name from Web Storage
@@ -210,13 +213,21 @@ function loadStudentName() {
     const savedName = localStorage.getItem(NAME_KEY);
     const nameInput = document.getElementById('studentNameInput');
 
-    if (savedName) {
+    // Requirement 5: Do not treat "Alice" or any sample name as a saved user
+    if (savedName && savedName.trim() !== '' && savedName.toLowerCase() !== 'alice') {
         if (nameInput) {
             nameInput.value = savedName;
         }
         updateWelcomeMessage(savedName);
     } else {
-        updateWelcomeMessage('Student');
+        // Clear sample name if present and reset to blank input & general welcome message
+        if (savedName) {
+            localStorage.removeItem(NAME_KEY);
+        }
+        if (nameInput) {
+            nameInput.value = '';
+        }
+        updateWelcomeMessage('');
     }
 }
 
@@ -224,7 +235,11 @@ function loadStudentName() {
 function updateWelcomeMessage(name) {
     const welcomeHeading = document.getElementById('welcomeMessage');
     if (welcomeHeading) {
-        welcomeHeading.textContent = `Welcome back, ${name}! 👋`;
+        if (name && name.trim()) {
+            welcomeHeading.textContent = `Welcome back, ${name}! 👋`;
+        } else {
+            welcomeHeading.textContent = 'Welcome! 👋';
+        }
     }
 }
 
