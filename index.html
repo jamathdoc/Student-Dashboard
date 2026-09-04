@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Header & Profile Section -->
@@ -17,7 +19,7 @@
                 <span class="logo-icon">🧮</span>
                 <h1>Math Spark Dashboard</h1>
             </div>
-            
+
             <div class="name-form">
                 <label for="studentNameInput" class="visually-hidden">Student Name</label>
                 <input type="text" id="studentNameInput" placeholder="Enter student name..." autocomplete="off">
@@ -37,7 +39,10 @@
         <section class="progress-section">
             <div class="progress-header">
                 <h3>Overall Progress</h3>
-                <span id="progressText" class="progress-text">0 of 3 Lessons Completed</span>
+                <div class="progress-controls">
+                    <span id="progressText" class="progress-text">0 of 3 Lessons Completed</span>
+                    <button id="resetProgressBtn" class="btn btn-reset">Reset Progress</button>
+                </div>
             </div>
             <div class="progress-track">
                 <div id="progressBar" class="progress-fill progress-fill-0"></div>
@@ -47,7 +52,7 @@
         <!-- Math Lesson Cards -->
         <section class="lessons-section">
             <h2>Math Lessons</h2>
-            
+
             <div class="cards-grid">
                 <!-- Lesson 1 Card -->
                 <div class="card" id="card-1">
@@ -59,7 +64,8 @@
                     <p>Master combining numbers and finding differences through fun step-by-step challenges.</p>
                     <div class="card-actions">
                         <button class="btn btn-start" onclick="startLesson(1)">Start Lesson</button>
-                        <button id="completeBtn-1" class="btn btn-complete" onclick="toggleComplete(1)">Mark Complete</button>
+                        <button id="completeBtn-1" class="btn btn-complete" onclick="toggleComplete(1)">Mark
+                            Complete</button>
                     </div>
                 </div>
 
@@ -73,7 +79,8 @@
                     <p>Learn equal groups, arrays, and sharing quantities with interactive visual tools.</p>
                     <div class="card-actions">
                         <button class="btn btn-start" onclick="startLesson(2)">Start Lesson</button>
-                        <button id="completeBtn-2" class="btn btn-complete" onclick="toggleComplete(2)">Mark Complete</button>
+                        <button id="completeBtn-2" class="btn btn-complete" onclick="toggleComplete(2)">Mark
+                            Complete</button>
                     </div>
                 </div>
 
@@ -87,7 +94,8 @@
                     <p>Explore parts of a whole, half, quarters, and decimal numbers with clear examples.</p>
                     <div class="card-actions">
                         <button class="btn btn-start" onclick="startLesson(3)">Start Lesson</button>
-                        <button id="completeBtn-3" class="btn btn-complete" onclick="toggleComplete(3)">Mark Complete</button>
+                        <button id="completeBtn-3" class="btn btn-complete" onclick="toggleComplete(3)">Mark
+                            Complete</button>
                     </div>
                 </div>
             </div>
@@ -106,7 +114,8 @@
                 </div>
                 <div class="modal-actions">
                     <button class="btn btn-primary" onclick="closeLessonModal()">Close Lesson</button>
-                    <button id="modalCompleteBtn" class="btn btn-complete" onclick="completeFromModal()">Mark Complete</button>
+                    <button id="modalCompleteBtn" class="btn btn-complete" onclick="completeFromModal()">Mark
+                        Complete</button>
                 </div>
             </div>
         </div>
@@ -114,4 +123,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

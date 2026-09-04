@@ -163,6 +163,22 @@ body {
     background-color: #4f46e5;
 }
 
+.btn-reset {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 12px;
+}
+
+.btn-reset:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border-color: #fca5a5;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.15);
+}
+
 /* Welcome Banner */
 .welcome-card {
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
@@ -200,12 +216,21 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .progress-header h3 {
     font-size: 1.15rem;
     color: #1e293b;
     font-weight: 600;
+}
+
+.progress-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .progress-text {
@@ -234,10 +259,21 @@ body {
     transition: width 0.4s ease-in-out;
 }
 
-.progress-fill-0 { width: 0%; }
-.progress-fill-33 { width: 33.33%; }
-.progress-fill-66 { width: 66.66%; }
-.progress-fill-100 { width: 100%; }
+.progress-fill-0 {
+    width: 0%;
+}
+
+.progress-fill-33 {
+    width: 33.33%;
+}
+
+.progress-fill-66 {
+    width: 66.66%;
+}
+
+.progress-fill-100 {
+    width: 100%;
+}
 
 /* Lessons Section & Grid */
 .lessons-section h2 {

@@ -73,6 +73,12 @@ function initDashboard() {
         });
     }
 
+    // Event listener for Reset Progress button
+    const resetBtn = document.getElementById('resetProgressBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetProgress);
+    }
+
     // Load saved student name from Web Storage
     loadStudentName();
 
@@ -84,7 +90,7 @@ function initDashboard() {
 function saveStudentName() {
     const nameInput = document.getElementById('studentNameInput');
     const name = nameInput.value.trim();
-    
+
     if (name) {
         localStorage.setItem(NAME_KEY, name);
         updateWelcomeMessage(name);
@@ -98,7 +104,7 @@ function saveStudentName() {
 function loadStudentName() {
     const savedName = localStorage.getItem(NAME_KEY);
     const nameInput = document.getElementById('studentNameInput');
-    
+
     if (savedName) {
         if (nameInput) {
             nameInput.value = savedName;
@@ -294,4 +300,15 @@ function completeFromModal() {
     if (activeLessonId !== null) {
         toggleComplete(activeLessonId);
     }
+}
+
+// Reset all lesson progress after student confirmation
+function resetProgress() {
+    const confirmed = confirm('Are you sure you want to reset your lesson progress?');
+    if (!confirmed) return;
+
+    localStorage.removeItem(STATUSES_KEY);
+    localStorage.removeItem(COMPLETED_KEY);
+
+    renderProgressAndLessons();
 }
