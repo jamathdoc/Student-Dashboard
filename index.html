@@ -110,7 +110,16 @@
                     <h3 id="modalTitle">Lesson Title</h3>
                 </div>
                 <div id="modalBody" class="modal-body">
-                    <p>Lesson content will appear here.</p>
+                    <div id="modalRefresher"></div>
+                    <div class="practice-section">
+                        <p class="practice-title"><strong>Practice Question:</strong></p>
+                        <p id="modalQuestion" class="practice-question"></p>
+                        <div class="practice-input-group">
+                            <input type="text" id="practiceAnswerInput" placeholder="Enter your answer..." autocomplete="off">
+                            <button id="checkAnswerBtn" class="btn btn-check" onclick="checkLessonAnswer()">Check Answer</button>
+                        </div>
+                        <div id="practiceFeedback" class="practice-feedback hidden"></div>
+                    </div>
                 </div>
                 <div class="modal-actions">
                     <button class="btn btn-primary" onclick="closeLessonModal()">Close Lesson</button>

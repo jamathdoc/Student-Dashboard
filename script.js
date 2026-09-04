@@ -13,44 +13,53 @@ const lessonsData = {
     1: {
         title: "1. Addition & Subtraction",
         icon: "➕",
-        content: `
+        refresher: `
             <p><strong>Quick Concept Refresher:</strong></p>
             <ul>
                 <li><strong>Addition (+):</strong> Combining numbers together. (e.g., 7 + 5 = 12)</li>
                 <li><strong>Subtraction (-):</strong> Taking one number away from another. (e.g., 15 - 6 = 9)</li>
             </ul>
-            <p style="margin-top: 1rem;"><strong>Practice Question:</strong></p>
-            <p>If you have 8 apples and pick 4 more, how many apples do you have in total?</p>
-            <p style="margin-top: 0.5rem; color: #059669; font-weight: 600;">Answer: 8 + 4 = 12 apples!</p>
-        `
+        `,
+        question: "If you have 8 apples and pick 4 more, how many apples do you have in total?",
+        correctAnswerText: "8 + 4 = 12 apples!",
+        checkAnswer: (input) => {
+            const val = input.trim().toLowerCase();
+            return val === '12' || val === '12 apples' || val === '12 apples!' || val === 'twelve' || val === 'twelve apples' || val.includes('12');
+        }
     },
     2: {
         title: "2. Multiplication & Division",
         icon: "✖️",
-        content: `
+        refresher: `
             <p><strong>Quick Concept Refresher:</strong></p>
             <ul>
                 <li><strong>Multiplication (&times;):</strong> Fast repeated addition of equal groups. (e.g., 4 &times; 3 = 12)</li>
                 <li><strong>Division (&divide;):</strong> Splitting a quantity into equal groups. (e.g., 12 &divide; 3 = 4)</li>
             </ul>
-            <p style="margin-top: 1rem;"><strong>Practice Question:</strong></p>
-            <p>If 15 cookies are shared equally among 3 friends, how many cookies does each friend get?</p>
-            <p style="margin-top: 0.5rem; color: #059669; font-weight: 600;">Answer: 15 &divide; 3 = 5 cookies each!</p>
-        `
+        `,
+        question: "If 15 cookies are shared equally among 3 friends, how many cookies does each friend get?",
+        correctAnswerText: "15 &divide; 3 = 5 cookies each!",
+        checkAnswer: (input) => {
+            const val = input.trim().toLowerCase();
+            return val === '5' || val === '5 cookies' || val === '5 cookies each' || val === 'five' || val === 'five cookies' || val.includes('5');
+        }
     },
     3: {
         title: "3. Fractions & Decimals",
         icon: "🍕",
-        content: `
+        refresher: `
             <p><strong>Quick Concept Refresher:</strong></p>
             <ul>
                 <li><strong>Fractions:</strong> Represent parts of a whole unit (e.g., 1/2 is half, 3/4 is three quarters).</li>
                 <li><strong>Decimals:</strong> Numbers expressed with a decimal point (e.g., 0.5 equals 1/2).</li>
             </ul>
-            <p style="margin-top: 1rem;"><strong>Practice Question:</strong></p>
-            <p>If you eat 2 slices out of an 8-slice pizza, what fraction of the pizza did you eat?</p>
-            <p style="margin-top: 0.5rem; color: #059669; font-weight: 600;">Answer: 2/8 (which simplifies to 1/4 or 0.25)!</p>
-        `
+        `,
+        question: "If you eat 2 slices out of an 8-slice pizza, what fraction of the pizza did you eat?",
+        correctAnswerText: "2/8 (which simplifies to 1/4 or 0.25)!",
+        checkAnswer: (input) => {
+            const val = input.trim().toLowerCase();
+            return val.includes('2/8') || val.includes('1/4') || val.includes('0.25') || val.includes('one fourth') || val.includes('one-fourth') || val.includes('quarter') || val.includes('2 out of 8');
+        }
     }
 };
 
@@ -69,6 +78,16 @@ function initDashboard() {
         nameInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 saveStudentName();
+            }
+        });
+    }
+
+    // Event listener for Practice Answer Input Enter keypress
+    const answerInput = document.getElementById('practiceAnswerInput');
+    if (answerInput) {
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkLessonAnswer();
             }
         });
     }
@@ -169,17 +188,57 @@ function startLesson(lessonId) {
     const modal = document.getElementById('lessonModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalIcon = document.getElementById('modalIcon');
-    const modalBody = document.getElementById('modalBody');
+    const modalRefresher = document.getElementById('modalRefresher');
+    const modalQuestion = document.getElementById('modalQuestion');
+    const answerInput = document.getElementById('practiceAnswerInput');
+    const feedbackEl = document.getElementById('practiceFeedback');
 
     if (modalTitle) modalTitle.textContent = lesson.title;
     if (modalIcon) modalIcon.textContent = lesson.icon;
-    if (modalBody) modalBody.innerHTML = lesson.content;
+    if (modalRefresher) modalRefresher.innerHTML = lesson.refresher;
+    if (modalQuestion) modalQuestion.textContent = lesson.question;
+
+    // Requirement 7: Clear answer input and feedback state when opening a lesson
+    if (answerInput) answerInput.value = '';
+    if (feedbackEl) {
+        feedbackEl.innerHTML = '';
+        feedbackEl.className = 'practice-feedback hidden';
+    }
 
     updateModalCompleteButton(statuses[lessonId] === 'Completed');
     renderProgressAndLessons();
 
     if (modal) {
         modal.classList.remove('modal-hidden');
+    }
+}
+
+// Check Student Answer for Active Lesson Practice Question
+function checkLessonAnswer() {
+    if (!activeLessonId || !lessonsData[activeLessonId]) return;
+
+    const inputEl = document.getElementById('practiceAnswerInput');
+    const feedbackEl = document.getElementById('practiceFeedback');
+    if (!inputEl || !feedbackEl) return;
+
+    const userInputValue = inputEl.value.trim();
+
+    // Requirement 6: Do not allow an empty response to be checked
+    if (!userInputValue) {
+        feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> Please enter an answer first before checking.';
+        feedbackEl.className = 'practice-feedback feedback-warning';
+        return;
+    }
+
+    const lesson = lessonsData[activeLessonId];
+    const isCorrect = lesson.checkAnswer(userInputValue);
+
+    if (isCorrect) {
+        feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <strong>Correct!</strong> ${lesson.correctAnswerText}`;
+        feedbackEl.className = 'practice-feedback feedback-success';
+    } else {
+        feedbackEl.innerHTML = `<span class="feedback-icon">❌</span> That response is not correct. The correct answer is: <strong>${lesson.correctAnswerText}</strong>`;
+        feedbackEl.className = 'practice-feedback feedback-error';
     }
 }
 
