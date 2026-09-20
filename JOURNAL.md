@@ -190,3 +190,178 @@ Add more lessons and practice questions later
 
 Explore student accounts and a database in a future version
 
+
+
+
+📘 Project Journal
+September 17, 2026
+
+🔵 What I Worked On
+
+This week I continued working on the Student Math Dashboard and focused on improving the practice experience for students.
+
+I made several updates to the dashboard:
+
+Added a question counter so students can see their progress through the practice section
+
+Added a correct-answer score
+
+Added an attempt counter
+
+Added a Next Question button
+
+Changed the lesson requirements so students must earn four correct answers before they can complete a lesson
+
+Added backup questions that appear when a student answers incorrectly
+
+Changed the practice flow so the visible goal remains four correct answers instead of showing every question in the question bank
+
+Updated Reset Progress so it also clears the practice score, attempts, current question, and backup question position
+
+🟡 Decisions I Made
+
+One of the main decisions I made this week was changing how many correct answers a student needs before completing a lesson.
+
+Previously, a student only needed one correct answer before they could mark the lesson complete. I decided that one correct answer was not enough practice, so I changed the requirement to four correct answers.
+
+I also had to decide how the question bank should work.
+
+At first, I considered simply showing all of the available questions as part of the lesson. I decided against that because I did not want every student to be required to complete a longer set of questions.
+
+Instead, the student sees the practice as four questions. The extra questions are used as backup questions if the student answers one incorrectly.
+
+For example, if a student is on Question 2 of 4 and answers incorrectly, the dashboard gives them another question, but the visible progress remains Question 2 of 4. Once they answer a question correctly, they can move forward.
+
+I also decided to track attempts separately from correct answers. This allows students to see how many times they tried while still keeping the completion goal focused on four correct answers.
+
+🔴 Challenges and Errors I Encountered
+
+While working on the practice system, I ran into a few problems with the code.
+
+At one point, there was a save conflict in Antigravity and part of the practice tracking code disappeared.
+
+I also noticed duplicated code after one of the agent edits.
+
+There were two declarations for the practice statistics and two declarations for the question number. There were also two different versions of the question counter being used at the same time.
+
+Another issue was making sure the backup questions worked the way I wanted. I did not want the dashboard to show Question 1 of 8 because the student is not expected to complete eight questions. The goal is still four correct answers.
+
+I also had to make sure Reset Progress cleared the new practice data and not only the lesson status.
+
+🟢 How I Solved Them
+
+When the save conflict happened, I compared the versions of the file and restored the missing practice tracking code.
+
+For the duplicated code, I reviewed the changes before accepting them and had the Antigravity agent remove the duplicate variables and keep only the correct version.
+
+I made sure the practice statistics were set up for all three lessons.
+
+I also changed the question counter so it displays progress toward the four required correct answers instead of showing the total number of questions in the question bank.
+
+The practice flow now uses four main questions and additional backup questions.
+
+If a student answers incorrectly, the attempt count increases, but the correct-answer count does not. The dashboard then gives the student another question while keeping them on the same visible practice step.
+
+If the student answers correctly, the correct-answer score increases and they can move to the next question.
+
+Once the student reaches four correct answers, the practice section is complete and the lesson can be marked complete.
+
+I also updated Reset Progress so it clears the correct-answer count, attempts, current question, and backup question position.
+
+🧪 Testing
+
+I tested the updated dashboard using Go Live in Antigravity.
+
+I checked that:
+
+Practice begins at Question 1 of 4
+
+Correct answers increase the correct-answer score
+
+Every submitted answer increases the attempt count
+
+Incorrect answers do not increase the correct-answer score
+
+An incorrect answer gives the student a backup question
+
+The visible question number stays the same after an incorrect answer
+
+A correct backup answer counts toward the four required correct answers
+
+The Next Question button appears after a correct answer
+
+The Next Question button moves the student forward in the practice flow
+
+Students cannot complete a lesson before earning four correct answers
+
+The lesson becomes available for completion after the student earns four correct answers
+
+The practice completion message appears after the fourth correct answer
+
+Reset Progress clears the practice score and question progress
+
+The student's saved name remains after resetting progress
+
+I also tested a full lesson from the first question through four correct answers.
+
+The features worked as expected during my manual testing.
+
+🟠 What I Parked
+
+There are other features I could add, but I decided not to add everything at once.
+
+For now, I parked:
+
+Difficulty levels
+
+Timed practice
+
+Percentage grades
+
+Student accounts
+
+Passwords
+
+A database
+
+Online progress syncing
+
+Teacher reports
+
+Adaptive question difficulty
+
+More advanced student analytics
+
+I may come back to some of these later, but for now I want to keep the project focused on improving the practice experience and making sure the current features work well together.
+
+🟣 What I Learned
+
+One thing I learned this week is that using a coding agent does not mean I can accept every change without checking it.
+
+The agent helped me make changes more quickly, but I still had to review the code carefully.
+
+I caught duplicated variables, noticed when part of the practice tracking code was missing, and tested the dashboard myself before deciding that the changes were complete.
+
+I also learned that the way a feature is presented to the student matters.
+
+Technically, the dashboard could have shown all eight questions in the question bank, but that did not match the experience I wanted. The student only needs four correct answers, so I changed the visible counter to reflect that goal.
+
+I also started thinking more about what should happen after a student gets something wrong. Instead of simply counting the mistake and moving on, I used backup questions so the student gets another opportunity to practice the same skill.
+
+This week helped me see that building the feature is only one part of the process. I also have to think about the rules behind the feature, how the student experiences it, and whether the code actually matches what I intended.
+
+🟣 Next Steps
+
+Next, I want to:
+
+Keep testing the practice flow and make sure all three lessons behave the same way
+
+Keep the README updated as the project changes
+
+Continue using clear commit messages that explain what I changed
+
+Consider adding a lesson summary that shows the student's total attempts and correct answers
+
+Explore larger or randomized question banks later
+
+Continue thinking about student accounts and a database for a future version
