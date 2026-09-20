@@ -488,6 +488,27 @@ body {
     font-size: 1rem;
 }
 
+
+.practice-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4f46e5;
+    background: #eef2ff;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+
 .practice-question {
     color: #334155;
     font-weight: 500;
