@@ -6,9 +6,11 @@ const STATUSES_KEY = 'math_dashboard_lesson_statuses';
 const COMPLETED_KEY = 'math_dashboard_completed_lessons'; // Fallback / legacy compatibility
 
 // State Variables
+const REQUIRED_CORRECT_ANSWERS = 4;
 let activeLessonId = null;
 const solvedLessons = { 1: false, 2: false, 3: false };
 const currentQuestionIndex = { 1: 0, 2: 0, 3: 0 };
+const nextBackupQuestionIndex = { 1: 4, 2: 4, 3: 4 };
 
 const practiceStats = {
     1: { correct: 0, attempts: 0 },
@@ -60,6 +62,38 @@ const lessonsData = {
                     const val = input.trim().toLowerCase();
                     return val === '12' || val === '12 candies' || val === 'twelve' || val.includes('12');
                 }
+            },
+            {
+                question: "A library shelf has 14 books. A student returns 8 more books. How many books are on the shelf now?",
+                correctAnswerText: "14 + 8 = 22 books!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '22' || val === '22 books' || val === 'twenty two' || val === 'twenty-two' || val.includes('22');
+                }
+            },
+            {
+                question: "There are 18 ducks in a pond. 7 ducks waddle away onto the grass. How many ducks are left in the pond?",
+                correctAnswerText: "18 - 7 = 11 ducks!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '11' || val === '11 ducks' || val === 'eleven' || val.includes('11');
+                }
+            },
+            {
+                question: "Maya baked 13 chocolate cookies and 12 vanilla cookies. How many cookies did Maya bake altogether?",
+                correctAnswerText: "13 + 12 = 25 cookies!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '25' || val === '25 cookies' || val === 'twenty five' || val === 'twenty-five' || val.includes('25');
+                }
+            },
+            {
+                question: "A toy store has 30 toy cars. They sell 14 cars during the afternoon. How many toy cars are left?",
+                correctAnswerText: "30 - 14 = 16 toy cars!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '16' || val === '16 toy cars' || val === 'sixteen' || val.includes('16');
+                }
             }
         ]
     },
@@ -105,6 +139,38 @@ const lessonsData = {
                     const val = input.trim().toLowerCase();
                     return val === '24' || val === '24 trees' || val === 'twenty four' || val === 'twenty-four' || val.includes('24');
                 }
+            },
+            {
+                question: "There are 6 baskets, and each basket holds 7 oranges. How many oranges are there in total?",
+                correctAnswerText: "6 &times; 7 = 42 oranges!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '42' || val === '42 oranges' || val === 'forty two' || val === 'forty-two' || val.includes('42');
+                }
+            },
+            {
+                question: "A classroom of 24 students is divided equally into 4 teams. How many students are on each team?",
+                correctAnswerText: "24 &divide; 4 = 6 students!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '6' || val === '6 students' || val === 'six' || val.includes('6');
+                }
+            },
+            {
+                question: "A pack contains 8 juice boxes. If you buy 5 packs, how many juice boxes do you have?",
+                correctAnswerText: "8 &times; 5 = 40 juice boxes!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '40' || val === '40 juice boxes' || val === 'forty' || val.includes('40');
+                }
+            },
+            {
+                question: "A baker has 36 cupcakes and packs 6 cupcakes per box. How many boxes does the baker need?",
+                correctAnswerText: "36 &divide; 6 = 6 boxes!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '6' || val === '6 boxes' || val === 'six' || val.includes('6');
+                }
             }
         ]
     },
@@ -149,6 +215,38 @@ const lessonsData = {
                 checkAnswer: (input) => {
                     const val = input.trim().toLowerCase();
                     return val === '1/2' || val === '0.5' || val.includes('1/2') || val.includes('0.5') || val.includes('half');
+                }
+            },
+            {
+                question: "What fraction represents 5 out of 10 equal parts of a garden?",
+                correctAnswerText: "5/10 (which simplifies to 1/2 or 0.5)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val.includes('5/10') || val.includes('1/2') || val.includes('0.5') || val.includes('half') || val.includes('five tenths');
+                }
+            },
+            {
+                question: "What decimal is equivalent to the fraction 1/4?",
+                correctAnswerText: "0.25 (or 1/4)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '0.25' || val === '0.250' || val === '1/4' || val.includes('0.25') || val.includes('one fourth') || val.includes('one quarter') || val.includes('quarter');
+                }
+            },
+            {
+                question: "If a ribbon is 0.75 meters long, what fraction of a meter is that in simplest form?",
+                correctAnswerText: "3/4 (or 0.75)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '3/4' || val === '0.75' || val.includes('3/4') || val.includes('0.75') || val.includes('three fourths') || val.includes('three quarters');
+                }
+            },
+            {
+                question: "A runner completed 4 out of 5 laps around the track. What fraction of the run is completed?",
+                correctAnswerText: "4/5 (or 0.8)!",
+                checkAnswer: (input) => {
+                    const val = input.trim().toLowerCase();
+                    return val === '4/5' || val === '0.8' || val.includes('4/5') || val.includes('0.8') || val.includes('four fifths');
                 }
             }
         ]
@@ -288,16 +386,15 @@ function setLessonStatuses(statusesMap) {
 }
 
 function updatePracticeStats(lessonId) {
-    const lesson = lessonsData[lessonId];
-    const stats = practiceStats[lessonId];
+    const stats = practiceStats[lessonId] || { correct: 0, attempts: 0 };
 
     const questionCounter = document.getElementById('questionCounter');
     const practiceScore = document.getElementById('practiceScore');
 
-    const questionNumber = (currentQuestionIndex[lessonId] || 0) + 1;
+    const questionNumber = Math.min(stats.correct + 1, REQUIRED_CORRECT_ANSWERS);
 
     if (questionCounter) {
-        questionCounter.textContent = `Question ${questionNumber} of ${lesson.questions.length}`;
+        questionCounter.textContent = `Question ${questionNumber} of ${REQUIRED_CORRECT_ANSWERS}`;
     }
 
     if (practiceScore) {
@@ -384,26 +481,41 @@ function checkLessonAnswer() {
 
     if (isCorrect) {
         practiceStats[activeLessonId].correct++;
-        // Requirement 6: Correct answer unlocks completion & displays positive feedback
-        solvedLessons[activeLessonId] = true;
-        feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <div><strong>Correct!</strong> ${currentQ.correctAnswerText}<br><span style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.2rem; display: inline-block;">Great job! You can now mark this lesson as complete.</span></div>`;
-        feedbackEl.className = 'practice-feedback feedback-success';
-
+        const correctCount = practiceStats[activeLessonId].correct;
         const nextQuestionBtn = document.getElementById('nextQuestionBtn');
-        if (nextQuestionBtn) {
-            nextQuestionBtn.classList.remove('hidden');
+
+        if (correctCount >= REQUIRED_CORRECT_ANSWERS) {
+            // Requirement 10: 4 correct answers unlocks lesson completion
+            solvedLessons[activeLessonId] = true;
+            feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <div><strong>Practice complete!</strong> You have ${REQUIRED_CORRECT_ANSWERS} correct answers and can now mark this lesson as complete.</div>`;
+            feedbackEl.className = 'practice-feedback feedback-success';
+
+            if (nextQuestionBtn) {
+                nextQuestionBtn.classList.add('hidden');
+            }
+        } else {
+            feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <div><strong>Correct!</strong> You have ${correctCount} of ${REQUIRED_CORRECT_ANSWERS} correct answers. Continue practicing.</div>`;
+            feedbackEl.className = 'practice-feedback feedback-success';
+
+            if (nextQuestionBtn) {
+                nextQuestionBtn.classList.remove('hidden');
+            }
         }
     } else {
-        // Requirement 3 & 5: Incorrect answer displays explanation, rotates to new question from bank, and clears input
+        // Requirement 6, 8, 9: Incorrect answer displays explanation, serves an unused backup question, and keeps visible question counter
         feedbackEl.innerHTML = `<span class="feedback-icon">❌</span> <div>That response is not correct. The correct answer was: <strong>${currentQ.correctAnswerText}</strong><br><span style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.25rem; display: inline-block;"><strong>New Question Loaded:</strong> Try the new question above!</span></div>`;
         feedbackEl.className = 'practice-feedback feedback-error';
 
-        // Rotate to the next question in the lesson's question bank
-        const nextIndex = (qIndex + 1) % lesson.questions.length;
-        currentQuestionIndex[activeLessonId] = nextIndex;
-        const newQ = lesson.questions[nextIndex];
+        // Select next backup question in order (indices 4..7)
+        let backupIndex = nextBackupQuestionIndex[activeLessonId];
+        if (backupIndex === undefined || backupIndex < 4 || backupIndex > 7) {
+            backupIndex = 4;
+        }
+        currentQuestionIndex[activeLessonId] = backupIndex;
+        nextBackupQuestionIndex[activeLessonId] = 4 + ((backupIndex - 4 + 1) % 4);
 
-        if (modalQuestion) {
+        const newQ = lesson.questions[backupIndex];
+        if (modalQuestion && newQ) {
             modalQuestion.textContent = newQ.question;
         }
 
@@ -422,7 +534,10 @@ function showNextQuestion() {
     if (!activeLessonId || !lessonsData[activeLessonId]) return;
 
     const lesson = lessonsData[activeLessonId];
-    const nextIndex = ((currentQuestionIndex[activeLessonId] || 0) + 1) % lesson.questions.length;
+    const correctCount = practiceStats[activeLessonId]?.correct || 0;
+
+    // Move to next required primary question (indices 0..3)
+    const nextIndex = Math.min(correctCount, REQUIRED_CORRECT_ANSWERS - 1);
     currentQuestionIndex[activeLessonId] = nextIndex;
 
     const newQ = lesson.questions[nextIndex];
@@ -431,7 +546,7 @@ function showNextQuestion() {
     const feedbackEl = document.getElementById('practiceFeedback');
     const nextQuestionBtn = document.getElementById('nextQuestionBtn');
 
-    if (modalQuestion) {
+    if (modalQuestion && newQ) {
         modalQuestion.textContent = newQ.question;
     }
 
@@ -456,19 +571,19 @@ function toggleComplete(lessonId) {
     const statuses = getLessonStatuses();
     const currentStatus = statuses[lessonId] || 'Not Started';
 
-    // Requirement 2: Must answer a practice question correctly before marking lesson complete
+    // Requirement 2: Must answer 4 practice questions correctly before marking lesson complete
     if (currentStatus !== 'Completed' && !solvedLessons[lessonId]) {
         if (activeLessonId === lessonId) {
             const feedbackEl = document.getElementById('practiceFeedback');
             if (feedbackEl) {
-                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> You must answer a practice question correctly before you can mark this lesson as complete!';
+                feedbackEl.innerHTML = `<span class="feedback-icon">⚠️</span> You need ${REQUIRED_CORRECT_ANSWERS} correct answers before you can mark this lesson as complete.`;
                 feedbackEl.className = 'practice-feedback feedback-warning';
             }
         } else {
             startLesson(lessonId);
             const feedbackEl = document.getElementById('practiceFeedback');
             if (feedbackEl) {
-                feedbackEl.innerHTML = '<span class="feedback-icon">⚠️</span> You must answer a practice question correctly before you can mark this lesson as complete!';
+                feedbackEl.innerHTML = `<span class="feedback-icon">⚠️</span> You need ${REQUIRED_CORRECT_ANSWERS} correct answers before you can mark this lesson as complete.`;
                 feedbackEl.className = 'practice-feedback feedback-warning';
             }
         }
@@ -607,6 +722,8 @@ function resetProgress() {
     for (let id = 1; id <= 3; id++) {
         solvedLessons[id] = false;
         currentQuestionIndex[id] = 0;
+        nextBackupQuestionIndex[id] = 4;
+        practiceStats[id] = { correct: 0, attempts: 0 };
     }
 
     renderProgressAndLessons();
