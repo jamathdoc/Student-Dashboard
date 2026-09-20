@@ -10,12 +10,21 @@ Student information and lesson progress are saved using **Web Storage**, so the 
 
 ## Features
 
+## Features
+
 - Save a student's name
 - Display a personalized welcome message
 - View three math lessons
 - Start a lesson
-- Mark lessons as complete
+- Review a quick concept refresher
+- Answer interactive practice questions
+- Track correct answers and total attempts
+- Use backup questions after incorrect answers
+- Move through practice using a Next Question button
+- Require four correct answers before completing a lesson
+- Track lessons as Not Started, In Progress, or Completed
 - Track overall lesson progress
+- Reset lesson and practice progress
 - Keep student data persistent using `localStorage`
 
 ## Technologies and Tools
@@ -170,3 +179,128 @@ I may add some of these later, but I want to keep the current version focused on
 Next, I may add more lessons and expand the practice question banks.
 
 Later, I would like to explore student accounts and a database so that a student's progress could be saved across different devices.
+
+
+
+
+# Week 5 Update
+
+## What I Changed
+
+This week I expanded the practice system in the Student Math Dashboard so students have to do more than answer one question correctly before completing a lesson.
+
+Previously, a student could answer one practice question correctly and then mark the lesson complete. I wanted the practice to feel more useful, so I changed the lesson flow.
+
+### Practice Progress Tracker
+
+I added a visible practice tracker inside each lesson.
+
+Students can now see:
+
+- Which practice question they are working on
+- How many answers they have gotten correct
+- How many attempts they have made
+
+The lesson displays progress such as:
+
+`Question 2 of 4`
+
+and:
+
+`Correct: 1 | Attempts: 2`
+
+This gives students a clearer idea of how they are doing while they practice.
+
+### Four Correct Answers Required
+
+Students now need to earn four correct answers before they can complete a lesson.
+
+Getting one answer correct no longer unlocks the completion button.
+
+If a student tries to mark the lesson complete too early, the dashboard tells them that they need four correct answers first.
+
+### Primary and Backup Questions
+
+Each lesson now uses four main practice questions and a bank of backup questions.
+
+The student still sees the lesson as a four-question practice goal.
+
+If a student gets one of the main questions wrong, the dashboard gives them a different question from the backup bank. The visible question number does not move forward until the student earns the correct answer.
+
+For example, if the student is on `Question 2 of 4` and gets the question wrong, they receive another question but remain on `Question 2 of 4`.
+
+This lets students continue practicing the same skill without immediately repeating the exact same problem.
+
+### Next Question Button
+
+I also added a **Next Question** button.
+
+After a correct answer, students can move to the next practice question. The answer box and feedback are cleared before the next question appears.
+
+Once the student earns four correct answers, the Next Question button disappears and the lesson can be marked complete.
+
+### Reset Progress
+
+I updated the reset feature so that it also clears the new practice data.
+
+Resetting progress now resets:
+
+- Lesson status
+- Correct answer count
+- Attempt count
+- Current practice question
+- Backup question position
+
+The student's saved name still remains.
+
+## Testing
+
+I tested the updated practice flow manually using Go Live in Antigravity.
+
+I checked that:
+
+- Practice starts at `Question 1 of 4`
+- Correct answers increase the correct score
+- Every submitted answer increases the attempt count
+- Incorrect answers do not increase the correct score
+- An incorrect answer loads a backup question
+- The visible question number stays the same after an incorrect answer
+- Correct backup answers count toward the four required answers
+- The Next Question button appears after a correct answer
+- The Next Question button disappears after it is clicked
+- Students cannot complete a lesson before earning four correct answers
+- The lesson becomes available for completion after four correct answers
+- Reset Progress clears the practice score and question progress
+
+## Important Decision
+
+I decided not to make students work through all of the questions in the question bank.
+
+Instead, the visible goal remains four correct answers. The extra questions are used as backup questions when a student answers incorrectly.
+
+I chose this approach because I wanted students to have another chance to practice without making the lesson feel unnecessarily long.
+
+## What I Parked
+
+For now, I decided not to add:
+
+- Difficulty levels
+- Timed practice
+- Percentage grades
+- Student accounts
+- A database
+- Teacher reports
+- Adaptive question difficulty
+- Online progress syncing
+
+I may explore some of these later, but I want the current version to stay focused on lesson practice and progress tracking.
+
+## Next Steps
+
+Possible future updates include:
+
+- Adding larger question banks
+- Randomizing backup questions
+- Saving practice scores between sessions
+- Adding a lesson summary after completion
+- Showing students which skills they may need to practice again
