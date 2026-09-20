@@ -345,6 +345,11 @@ function startLesson(lessonId) {
         feedbackEl.className = 'practice-feedback hidden';
     }
 
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+    if (nextQuestionBtn) {
+        nextQuestionBtn.classList.add('hidden');
+    }
+
     updateModalCompleteButton(statuses[lessonId] === 'Completed');
     renderProgressAndLessons();
 
@@ -383,6 +388,11 @@ function checkLessonAnswer() {
         solvedLessons[activeLessonId] = true;
         feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <div><strong>Correct!</strong> ${currentQ.correctAnswerText}<br><span style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.2rem; display: inline-block;">Great job! You can now mark this lesson as complete.</span></div>`;
         feedbackEl.className = 'practice-feedback feedback-success';
+
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        if (nextQuestionBtn) {
+            nextQuestionBtn.classList.remove('hidden');
+        }
     } else {
         // Requirement 3 & 5: Incorrect answer displays explanation, rotates to new question from bank, and clears input
         feedbackEl.innerHTML = `<span class="feedback-icon">❌</span> <div>That response is not correct. The correct answer was: <strong>${currentQ.correctAnswerText}</strong><br><span style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.25rem; display: inline-block;"><strong>New Question Loaded:</strong> Try the new question above!</span></div>`;
@@ -405,6 +415,40 @@ function checkLessonAnswer() {
     const statuses = getLessonStatuses();
     updateModalCompleteButton(statuses[activeLessonId] === 'Completed');
     renderProgressAndLessons();
+}
+
+// Show Next Question in Lesson Practice
+function showNextQuestion() {
+    if (!activeLessonId || !lessonsData[activeLessonId]) return;
+
+    const lesson = lessonsData[activeLessonId];
+    const nextIndex = ((currentQuestionIndex[activeLessonId] || 0) + 1) % lesson.questions.length;
+    currentQuestionIndex[activeLessonId] = nextIndex;
+
+    const newQ = lesson.questions[nextIndex];
+    const modalQuestion = document.getElementById('modalQuestion');
+    const answerInput = document.getElementById('practiceAnswerInput');
+    const feedbackEl = document.getElementById('practiceFeedback');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+
+    if (modalQuestion) {
+        modalQuestion.textContent = newQ.question;
+    }
+
+    if (answerInput) {
+        answerInput.value = '';
+    }
+
+    if (feedbackEl) {
+        feedbackEl.innerHTML = '';
+        feedbackEl.className = 'practice-feedback hidden';
+    }
+
+    if (nextQuestionBtn) {
+        nextQuestionBtn.classList.add('hidden');
+    }
+
+    updatePracticeStats(activeLessonId);
 }
 
 // Toggle or Mark Lesson as Complete

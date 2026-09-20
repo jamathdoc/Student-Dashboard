@@ -502,6 +502,13 @@ body {
     border-radius: 10px;
 }
 
+#nextQuestionBtn {
+    align-self: flex-start;
+}
+
+.hidden {
+    display: none;
+}
 
 
 
