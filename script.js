@@ -10,6 +10,12 @@ let activeLessonId = null;
 const solvedLessons = { 1: false, 2: false, 3: false };
 const currentQuestionIndex = { 1: 0, 2: 0, 3: 0 };
 
+const practiceStats = {
+    1: { correct: 0, attempts: 0 },
+    2: { correct: 0, attempts: 0 },
+    3: { correct: 0, attempts: 0 }
+};
+
 // Lesson Data Details with Question Banks
 const lessonsData = {
     1: {
@@ -281,6 +287,24 @@ function setLessonStatuses(statusesMap) {
     localStorage.setItem(COMPLETED_KEY, JSON.stringify(completedArray));
 }
 
+function updatePracticeStats(lessonId) {
+    const lesson = lessonsData[lessonId];
+    const stats = practiceStats[lessonId];
+
+    const questionCounter = document.getElementById('questionCounter');
+    const practiceScore = document.getElementById('practiceScore');
+
+    const questionNumber = (currentQuestionIndex[lessonId] || 0) + 1;
+
+    if (questionCounter) {
+        questionCounter.textContent = `Question ${questionNumber} of ${lesson.questions.length}`;
+    }
+
+    if (practiceScore) {
+        practiceScore.textContent = `Correct: ${stats.correct} | Attempts: ${stats.attempts}`;
+    }
+}
+
 // Start Lesson - Opens lesson modal and sets lesson status to "In Progress" (if currently Not Started)
 function startLesson(lessonId) {
     const lesson = lessonsData[lessonId];
@@ -311,6 +335,8 @@ function startLesson(lessonId) {
     const qIndex = currentQuestionIndex[lessonId] || 0;
     const currentQ = lesson.questions[qIndex];
     if (modalQuestion) modalQuestion.textContent = currentQ.question;
+
+    updatePracticeStats(lessonId);
 
     // Requirement 9: Clear answer input and feedback state when opening a lesson
     if (answerInput) answerInput.value = '';
@@ -349,8 +375,10 @@ function checkLessonAnswer() {
     const qIndex = currentQuestionIndex[activeLessonId] || 0;
     const currentQ = lesson.questions[qIndex];
     const isCorrect = currentQ.checkAnswer(userInputValue);
+    practiceStats[activeLessonId].attempts++;
 
     if (isCorrect) {
+        practiceStats[activeLessonId].correct++;
         // Requirement 6: Correct answer unlocks completion & displays positive feedback
         solvedLessons[activeLessonId] = true;
         feedbackEl.innerHTML = `<span class="feedback-icon">🎉</span> <div><strong>Correct!</strong> ${currentQ.correctAnswerText}<br><span style="font-size: 0.88rem; opacity: 0.9; margin-top: 0.2rem; display: inline-block;">Great job! You can now mark this lesson as complete.</span></div>`;
@@ -373,6 +401,7 @@ function checkLessonAnswer() {
         inputEl.value = '';
     }
 
+    updatePracticeStats(activeLessonId);
     const statuses = getLessonStatuses();
     updateModalCompleteButton(statuses[activeLessonId] === 'Completed');
     renderProgressAndLessons();
