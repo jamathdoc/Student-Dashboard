@@ -1,29 +1,35 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Math Dashboard</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="dashboard-container">
+
         <!-- Header & Profile Section -->
         <header class="header">
             <div class="brand">
                 <span class="logo-icon">🧮</span>
-                <h1>Math Spark Dashboard</h1>
+                <h1>Algebra I Dashboard</h1>
             </div>
 
             <div class="name-form">
                 <label for="studentNameInput" class="visually-hidden">Student Name</label>
                 <input type="text" id="studentNameInput" placeholder="Enter student name..." autocomplete="off">
-                <button id="saveNameBtn" class="btn btn-save">Save Name</button>
+                <button id="saveNameBtn" class="btn btn-save">
+                    Save Name
+                </button>
             </div>
         </header>
 
@@ -31,7 +37,9 @@
         <section class="welcome-card">
             <div class="welcome-content">
                 <h2 id="welcomeMessage">Welcome! 👋</h2>
-                <p>Track your math journey, start new lessons, and check off your completed topics.</p>
+                <p>
+                    Track your math journey, start new lessons, and check off your completed topics.
+                </p>
             </div>
         </section>
 
@@ -39,11 +47,18 @@
         <section class="progress-section">
             <div class="progress-header">
                 <h3>Overall Progress</h3>
+
                 <div class="progress-controls">
-                    <span id="progressText" class="progress-text">0 of 3 Lessons Completed</span>
-                    <button id="resetProgressBtn" class="btn btn-reset">Reset Progress</button>
+                    <span id="progressText" class="progress-text">
+                        0 of 6 Lessons Completed
+                    </span>
+
+                    <button id="resetProgressBtn" class="btn btn-reset">
+                        Reset Progress
+                    </button>
                 </div>
             </div>
+
             <div class="progress-track">
                 <div id="progressBar" class="progress-fill progress-fill-0"></div>
             </div>
@@ -54,89 +69,245 @@
             <h2>Math Lessons</h2>
 
             <div class="cards-grid">
-                <!-- Lesson 1 Card -->
+
+                <!-- Lesson 1 -->
                 <div class="card" id="card-1">
                     <div class="card-header">
-                        <span class="lesson-icon">➕</span>
-                        <span id="badge-1" class="badge badge-incomplete">Not Started</span>
+                        <span class="lesson-icon">x</span>
+                        <span id="badge-1" class="badge badge-incomplete">
+                            Not Started
+                        </span>
                     </div>
-                    <h3>1. Addition & Subtraction</h3>
-                    <p>Master combining numbers and finding differences through fun step-by-step challenges.</p>
+
+                    <h3>1. Linear Equations &amp; Inequalities</h3>
+
+                    <p>
+                        Solve equations and inequalities, including multi-step problems
+                        and variables on both sides.
+                    </p>
+
                     <div class="card-actions">
-                        <button class="btn btn-start" onclick="startLesson(1)">Start Lesson</button>
-                        <button id="completeBtn-1" class="btn btn-complete" onclick="toggleComplete(1)">Mark
-                            Complete</button>
+                        <button class="btn btn-start" onclick="startLesson(1)">
+                            Start Lesson
+                        </button>
+
+                        <button id="completeBtn-1" class="btn btn-complete" onclick="toggleComplete(1)" hidden>
+                            Mark Complete
+                        </button>
                     </div>
                 </div>
 
-                <!-- Lesson 2 Card -->
+                <!-- Lesson 2 -->
                 <div class="card" id="card-2">
                     <div class="card-header">
-                        <span class="lesson-icon">✖️</span>
-                        <span id="badge-2" class="badge badge-incomplete">Not Started</span>
+                        <span class="lesson-icon">{x,y}</span>
+                        <span id="badge-2" class="badge badge-incomplete">
+                            Not Started
+                        </span>
                     </div>
-                    <h3>2. Multiplication & Division</h3>
-                    <p>Learn equal groups, arrays, and sharing quantities with interactive visual tools.</p>
+
+                    <h3>2. Systems of Equations</h3>
+
+                    <p>
+                        Solve systems of linear equations using substitution,
+                        elimination, and graphing methods.
+                    </p>
+
                     <div class="card-actions">
-                        <button class="btn btn-start" onclick="startLesson(2)">Start Lesson</button>
-                        <button id="completeBtn-2" class="btn btn-complete" onclick="toggleComplete(2)">Mark
-                            Complete</button>
+                        <button class="btn btn-start" onclick="startLesson(2)">
+                            Start Lesson
+                        </button>
+
+                        <button id="completeBtn-2" class="btn btn-complete" onclick="toggleComplete(2)" hidden>
+                            Mark Complete
+                        </button>
                     </div>
                 </div>
 
-                <!-- Lesson 3 Card -->
+                <!-- Lesson 3 -->
                 <div class="card" id="card-3">
                     <div class="card-header">
-                        <span class="lesson-icon">🍕</span>
-                        <span id="badge-3" class="badge badge-incomplete">Not Started</span>
+                        <span class="lesson-icon">f(x)</span>
+                        <span id="badge-3" class="badge badge-incomplete">
+                            Not Started
+                        </span>
                     </div>
-                    <h3>3. Fractions & Decimals</h3>
-                    <p>Explore parts of a whole, half, quarters, and decimal numbers with clear examples.</p>
+
+                    <h3>3. Functions</h3>
+
+                    <p>
+                        Interpret functions from equations, tables, graphs,
+                        and real-world situations.
+                    </p>
+
                     <div class="card-actions">
-                        <button class="btn btn-start" onclick="startLesson(3)">Start Lesson</button>
-                        <button id="completeBtn-3" class="btn btn-complete" onclick="toggleComplete(3)">Mark
-                            Complete</button>
+                        <button class="btn btn-start" onclick="startLesson(3)">
+                            Start Lesson
+                        </button>
+
+                        <button id="completeBtn-3" class="btn btn-complete" onclick="toggleComplete(3)" hidden>
+                            Mark Complete
+                        </button>
                     </div>
                 </div>
+
+                <!-- Lesson 4 -->
+                <div class="card" id="card-4">
+                    <div class="card-header">
+                        <span class="lesson-icon">xⁿ</span>
+                        <span id="badge-4" class="badge badge-incomplete">
+                            Not Started
+                        </span>
+                    </div>
+
+                    <h3>4. Exponents &amp; Polynomials</h3>
+
+                    <p>
+                        Apply exponent rules and perform operations with polynomials
+                        like adding, subtracting, and multiplying.
+                    </p>
+
+                    <div class="card-actions">
+                        <button class="btn btn-start" onclick="startLesson(4)">
+                            Start Lesson
+                        </button>
+
+                        <button id="completeBtn-4" class="btn btn-complete" onclick="toggleComplete(4)" hidden>
+                            Mark Complete
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lesson 5 -->
+                <div class="card" id="card-5">
+                    <div class="card-header">
+                        <span class="lesson-icon">x²</span>
+                        <span id="badge-5" class="badge badge-incomplete">
+                            Not Started
+                        </span>
+                    </div>
+
+                    <h3>5. Quadratic Functions</h3>
+
+                    <p>
+                        Work with quadratic equations, graphs, vertex form,
+                        and key features such as roots and the vertex.
+                    </p>
+
+                    <div class="card-actions">
+                        <button class="btn btn-start" onclick="startLesson(5)">
+                            Start Lesson
+                        </button>
+
+                        <button id="completeBtn-5" class="btn btn-complete" onclick="toggleComplete(5)" hidden>
+                            Mark Complete
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lesson 6 -->
+                <div class="card" id="card-6">
+                    <div class="card-header">
+                        <span class="lesson-icon">📊</span>
+                        <span id="badge-6" class="badge badge-incomplete">
+                            Not Started
+                        </span>
+                    </div>
+
+                    <h3>6. Statistics &amp; Data</h3>
+
+                    <p>
+                        Analyze data displays, measures of center and spread,
+                        box plots, and linear regression models.
+                    </p>
+
+                    <div class="card-actions">
+                        <button class="btn btn-start" onclick="startLesson(6)">
+                            Start Lesson
+                        </button>
+
+                        <button id="completeBtn-6" class="btn btn-complete" onclick="toggleComplete(6)" hidden>
+                            Mark Complete
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <!-- Lesson Viewer Modal -->
         <div id="lessonModal" class="modal-overlay modal-hidden">
             <div class="modal-content">
-                <button class="modal-close" onclick="closeLessonModal()">&times;</button>
+
+                <button class="modal-close" onclick="closeLessonModal()">
+                    &times;
+                </button>
+
                 <div class="modal-header">
-                    <span id="modalIcon" class="modal-icon">📚</span>
-                    <h3 id="modalTitle">Lesson Title</h3>
+                    <span id="modalIcon" class="modal-icon">
+                        📚
+                    </span>
+
+                    <h3 id="modalTitle">
+                        Lesson Title
+                    </h3>
                 </div>
+
                 <div id="modalBody" class="modal-body">
+
                     <div id="modalRefresher"></div>
+
                     <div class="practice-section">
-                        <p class="practice-title"><strong>Practice Question:</strong></p>
+
+                        <p class="practice-title">
+                            <strong>Practice Question:</strong>
+                        </p>
+
                         <div class="practice-stats">
-                            <span id="questionCounter">Question 1 of 4</span>
-                            <span id="practiceScore">Correct: 0 | Attempts: 0</span>
+                            <span id="questionCounter">
+                                Question 1 of 10
+                            </span>
+
+                            <span id="practiceScore">
+                                Correct: 0 of 10
+                            </span>
                         </div>
+
                         <p id="modalQuestion" class="practice-question"></p>
+
                         <div class="practice-input-group">
+
                             <input type="text" id="practiceAnswerInput" placeholder="Enter your answer..."
                                 autocomplete="off">
-                            <button id="checkAnswerBtn" class="btn btn-check" onclick="checkLessonAnswer()">Check
-                                Answer</button>
+
+                            <button id="checkAnswerBtn" class="btn btn-check" onclick="checkLessonAnswer()">
+                                Check Answer
+                            </button>
                         </div>
+
                         <button id="nextQuestionBtn" class="btn btn-primary hidden" onclick="showNextQuestion()">
                             Next Question
                         </button>
+
                         <div id="practiceFeedback" class="practice-feedback hidden"></div>
+
                     </div>
                 </div>
+
                 <div class="modal-actions">
-                    <button class="btn btn-primary" onclick="closeLessonModal()">Close Lesson</button>
-                    <button id="modalCompleteBtn" class="btn btn-complete" onclick="completeFromModal()">Mark
-                        Complete</button>
+
+                    <button class="btn btn-primary" onclick="closeLessonModal()">
+                        Close Lesson
+                    </button>
+
+                    <button id="modalCompleteBtn" class="btn btn-complete" onclick="completeFromModal()" hidden>
+                        Mark Complete
+                    </button>
+
                 </div>
             </div>
         </div>
+
     </div>
 
     <script src="script.js"></script>

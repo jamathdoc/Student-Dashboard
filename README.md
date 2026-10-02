@@ -2,7 +2,7 @@
 
 > "A simple space for students to learn, practice, and keep track of their progress."
 
-The **Student Math Dashboard** is a beginner-friendly web application that allows students to enter their name, view available math lessons, start lessons, and track which lessons they have completed.
+The **Student Math Dashboard** is a beginner-friendly web application that allows students to enter their name, view Algebra I lessons, practice skills, and track which lessons they have completed.
 
 The project is designed for students who may need access to math learning materials when a teacher or tutor is not available. Instead of relying on someone to tell them what to work on next, students can open the dashboard and see their lessons and progress in one place.
 
@@ -10,18 +10,18 @@ Student information and lesson progress are saved using **Web Storage**, so the 
 
 ## Features
 
-## Features
-
 - Save a student's name
 - Display a personalized welcome message
-- View three math lessons
+- View six Algebra I lessons
 - Start a lesson
 - Review a quick concept refresher
 - Answer interactive practice questions
-- Track correct answers and total attempts
-- Use backup questions after incorrect answers
+- Practice with 10 randomly selected questions from a 40-question lesson bank
+- Track correct answers during practice
+- Track attempts internally
 - Move through practice using a Next Question button
-- Require four correct answers before completing a lesson
+- Automatically complete a lesson after all 10 practice questions are answered
+- Track missed questions and skills for future review features
 - Track lessons as Not Started, In Progress, or Completed
 - Track overall lesson progress
 - Reset lesson and practice progress
@@ -33,8 +33,8 @@ Student information and lesson progress are saved using **Web Storage**, so the 
 | --- | --- |
 | HTML | Creates the structure and content of the dashboard |
 | CSS | Controls the layout and visual design |
-| JavaScript | Handles student interactions and updates the dashboard |
-| Web Storage | Saves the student's name and completed lessons |
+| JavaScript | Handles student interactions, practice logic, and dashboard updates |
+| Web Storage | Saves the student's name and lesson progress |
 | Antigravity | Used to help build and develop the project |
 
 ## Project Structure
@@ -43,7 +43,7 @@ Student information and lesson progress are saved using **Web Storage**, so the 
 | --- | --- |
 | `index.html` | Contains the dashboard structure and lesson content |
 | `style.css` | Contains the styling for the dashboard |
-| `script.js` | Handles student names, lesson progress, and Web Storage |
+| `script.js` | Handles student names, lesson progress, practice questions, and Web Storage |
 
 ## Important Decisions
 
@@ -119,7 +119,7 @@ After the student enters and saves their name, the dashboard displays a personal
 
 ## Current Features
 
-The dashboard now allows students to:
+At this stage, the dashboard allowed students to:
 
 - Enter and save their own name
 - Receive a personalized welcome message
@@ -180,8 +180,7 @@ Next, I may add more lessons and expand the practice question banks.
 
 Later, I would like to explore student accounts and a database so that a student's progress could be saved across different devices.
 
-
-
+---
 
 # Week 5 Update
 
@@ -302,5 +301,189 @@ Possible future updates include:
 - Adding larger question banks
 - Randomizing backup questions
 - Saving practice scores between sessions
+- Adding a lesson summary after completion
+- Showing students which skills they may need to practice again
+
+---
+
+# Week 6 Update
+
+## What I Changed
+
+This week I made a major update to the Student Math Dashboard.
+
+The project moved from a small three-lesson math prototype to a broader Algebra I practice dashboard with six lessons, larger question banks, randomized practice sessions, and more detailed progress tracking.
+
+### Expanded to Six Algebra I Lessons
+
+I expanded the dashboard from three lessons to six Algebra I topics:
+
+- Linear Equations & Inequalities
+- Systems of Equations
+- Functions
+- Exponents & Polynomials
+- Quadratic Functions
+- Statistics & Data
+
+I also updated the lesson descriptions and icons so they match the new Algebra I content.
+
+### Larger Question Banks
+
+Each lesson now has a bank of 40 questions.
+
+With six lessons, the dashboard now contains 240 practice questions in total.
+
+I added skill labels to the questions so the dashboard can track the specific skill connected to each problem.
+
+Examples of skill labels include:
+
+- one-step-equations
+- variables-on-both-sides
+- substitution-method
+- rate-of-change
+- factoring-quadratics
+- calculating-residuals
+
+This will support future features such as showing students which skills they should practice again.
+
+### Randomized 10-Question Practice Sessions
+
+I changed the practice structure again.
+
+Instead of requiring four correct answers, each lesson now gives the student a 10-question practice session.
+
+The 10 questions are randomly selected from that lesson's 40-question bank.
+
+Questions do not repeat within the same practice session.
+
+The student now sees:
+
+`Question 1 of 10`
+
+and:
+
+`Correct: 0 of 10`
+
+A wrong answer still counts as one of the 10 questions. The student receives feedback and then moves to the next question.
+
+### Removed the Student-Facing Attempt Counter
+
+In the previous version, students could see both their number of correct answers and their total attempts.
+
+I decided to remove the attempt count from the student-facing display.
+
+The application can still track attempts internally, but I wanted the visible progress information to focus on the student's progress through the session rather than the number of mistakes they have made.
+
+### Automatic Lesson Completion
+
+I removed the need for students to manually mark a lesson complete.
+
+Previously, the dashboard included a `Mark Complete` button.
+
+Now, the lesson is automatically marked as `Completed` after the student answers Question 10.
+
+The overall lesson progress is also updated automatically.
+
+This makes the completion status reflect the work the student actually finished.
+
+### Missed Skill Tracking
+
+The dashboard now records:
+
+- Correct answers
+- Attempts
+- Questions answered
+- Missed questions
+- Missed skills
+
+This information is not all shown to the student yet, but it creates the foundation for future lesson summaries and practice recommendations.
+
+## Testing
+
+I tested the updated dashboard manually using Go Live in Antigravity.
+
+I checked that:
+
+- All six lesson cards appear correctly
+- Each lesson opens independently
+- Each lesson has a larger question bank
+- A practice session selects 10 questions
+- Practice displays `Question X of 10`
+- Practice displays `Correct: X of 10`
+- Incorrect answers do not increase the correct score
+- Incorrect answers still count as answered questions
+- The Next Question button moves the student through the session
+- The same question is not intentionally repeated within one session
+- The lesson is automatically marked complete after Question 10
+- Completed lessons update the overall dashboard progress
+- Reset Progress returns lesson progress to its starting state
+
+## Important Decisions
+
+### Question Bank Size vs. Session Length
+
+I decided to separate the size of the question bank from the length of a practice session.
+
+Each lesson has 40 available questions, but a student only receives 10 questions during one session.
+
+This gives the student more variety without requiring them to complete all 40 questions at once.
+
+### Progress Instead of Attempts
+
+I decided not to make the number of attempts a prominent student-facing metric.
+
+The dashboard still tracks attempts internally, but the student sees how many questions they have answered correctly instead.
+
+### Practice Controls Lesson Completion
+
+I also decided that students should not manually decide when a lesson is complete.
+
+The lesson is now completed automatically after the student finishes the 10-question practice session.
+
+## What I Noticed
+
+Testing the new Algebra I questions exposed an issue with the current answer input.
+
+The dashboard still uses a standard text field, which can make some mathematical answers difficult or awkward to enter.
+
+For example:
+
+- Fractions are easier to understand visually than when typed as plain text.
+- Inequality answers should require the full inequality, such as `x > 4`, instead of accepting only `4`.
+- Algebraic expressions can have multiple equivalent forms.
+
+I would like the answer field to eventually behave more like a math input tool with a virtual math keyboard.
+
+## What I Parked
+
+For now, I decided not to add:
+
+- A math input field
+- A virtual math keyboard
+- More advanced fraction entry
+- More advanced algebraic equivalence checking
+- Lesson summaries
+- Saved practice scores between sessions
+- Student skill recommendations
+- Difficulty levels
+- Timed practice
+- Student accounts
+- A database
+- Teacher reports
+- Online progress syncing
+- A full visual redesign
+
+I decided to leave the current visual design in place for now and focus on making the practice experience work correctly.
+
+## Next Steps
+
+Possible future updates include:
+
+- Adding a math-friendly answer input
+- Adding an on-screen math keyboard
+- Requiring complete inequality responses
+- Improving fraction entry
+- Improving equivalent answer checking
+- Saving practice results between sessions
 - Adding a lesson summary after completion
 - Showing students which skills they may need to practice again
